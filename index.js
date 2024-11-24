@@ -55,16 +55,16 @@ app.use(cookieParser());
 app.use(cors(corsOptions));
 
 
-// app.use(session({
-//   secret: process.env.SESSION_SECRET || 'secret',
-//   resave: false,
-//   saveUninitialized: false,
-//   cookie: {
-//     secure: false, // Change to true if using HTTPS
-//     httpOnly: true,
-//     maxAge: 3 * 24 * 60 * 60 * 1000 // 1 day
-//   }
-// }));
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'secret',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: false, // Change to true if using HTTPS
+    httpOnly: true,
+    maxAge: 3 * 24 * 60 * 60 * 1000 // 1 day
+  }
+}));
 
 
 const io = new Server(server, {
@@ -72,7 +72,7 @@ const io = new Server(server, {
 })
 app.set("io", io)
 app.use(passport.initialize());
-// app.use(passport.session());
+ app.use(passport.session());
 passport.serializeUser((user, done) => {
   done(null, user._id);
 });
