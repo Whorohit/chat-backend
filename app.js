@@ -160,7 +160,7 @@ passport.use(new GoogleStrategy({
 
 app.use('/api/user', userroute);
 app.use('/api/chat', chatroute);
-
+app.get("/",(req, res) => res.send("Express on  bro  Vercel"))
 
 
 io.use((socket, next) => {
