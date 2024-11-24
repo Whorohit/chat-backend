@@ -1,4 +1,4 @@
-import { onlineusers } from "../app.js";
+import { onlineusers } from "../index.js";
 
 export const getSockets = (users = []) => {
     const sockets = users.map((user) => onlineusers.get(user.toString()));
