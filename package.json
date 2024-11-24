@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "backend for  chat app using psql",
   "type": "module",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
-    "test": "node app.js",
-    "dev": "nodemon app.js"
+    "test": "node index.js",
+    "dev": "nodemon index.js"
   },
   "author": "",
   "license": "ISC",
