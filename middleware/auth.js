@@ -5,8 +5,6 @@ import { ErrorHandler } from '../utils/utils.js';
 
 
 const authenticateJWT = (req, res, next) => {
-  console.log(req);
-
   passport.authenticate('jwt', { session: false }, (err, user, info) => {
     console.log(user);
 
