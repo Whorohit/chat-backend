@@ -30,7 +30,7 @@ app.get('/google/callback',
     // Set the JWT token in a cookie
     res.cookie('token', token, {
       maxAge: 3 * 24 * 60 * 60 * 1000, // 3 days
-      httpOnly: true,
+      httpOnly: false,
       secure: true, // Secure flag only in production
       sameSite: 'none' // To prevent CSRF attacks
     });
