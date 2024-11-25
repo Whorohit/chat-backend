@@ -477,8 +477,8 @@ app.use(errorMiddleware);
 // createSampleChat(10)
 // createArchived('66e1e8cb8bc61be28617b01c');
 // createmessages(5000);
-// server.listen(port, () => {
-//   console.log(`Server is running at ${port}`);
-// });
+server.listen(port, () => {
+  console.log(`Server is running at ${port}`);
+});
 
 export default server; 
