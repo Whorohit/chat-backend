@@ -32,9 +32,9 @@ dotenv.config({ path: './.env' });
 export const onlineusers = new Map();
 export const callusers = new Map();
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: true, // Dynamically allow any site
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true
+  credentials: true, // Allow credentials
 };
 
 const server = createServer(app);
@@ -72,7 +72,7 @@ const io = new Server(server, {
 })
 app.set("io", io)
 app.use(passport.initialize());
- app.use(passport.session());
+app.use(passport.session());
 passport.serializeUser((user, done) => {
   done(null, user._id);
 });
@@ -160,7 +160,7 @@ passport.use(new GoogleStrategy({
 
 app.use('/api/user', userroute);
 app.use('/api/chat', chatroute);
-app.get("/",(req, res) => res.send("Express on  bro  Vercel"))
+app.get("/", (req, res) => res.send("Express on  bro  Vercel"))
 
 
 io.use((socket, next) => {
@@ -402,7 +402,7 @@ io.on("connection", async (socket) => {
       socket.to(membersSockets).emit('end-call');
 
       callusers.delete(chatId)
-      
+
 
       if (callresponse) {
         const call = await Call.findById(callid)
