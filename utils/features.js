@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import  {v2 as cloudinary} from 'cloudinary'
-import {v4 as uuid} from 'uuid'
+import { v2 as cloudinary } from 'cloudinary'
+import { v4 as uuid } from 'uuid'
 export const mongodbsend = (uri) => {
     mongoose.connect(uri, {
         // useNewUrlParser: true,
@@ -18,16 +18,17 @@ export const getBase64 = (file) =>
 import jwt from 'jsonwebtoken';
 
 export const sendtoken = (res, user, code, message) => {
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-  res.status(code).cookie('token', token, {
-    maxAge: 3 * 24 * 60 * 60 * 1000, // 1 day
-    httpOnly: true,
-    secure: true,
-  }).json({
-    success: true,
-    message,
-    user,
-  });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+    res.status(code).cookie('token', token, {
+        maxAge: 3 * 24 * 60 * 60 * 1000, // 1 day
+        httpOnly: true,
+        secure: true,
+        samesite: "none"
+    }).json({
+        success: true,
+        message,
+        user,
+    });
 };
 
 
@@ -64,14 +65,14 @@ export const uploadFilesToCloudinary = async (files = []) => {
     }
 };
 
-export const  cookieoptions=
+export const cookieoptions =
 {
-   maxAge: 1 * 24 * 60 * 60 * 1000,
-   samesite: "none",
-   httpOnly: true,
-   secure: true
+    maxAge: 1 * 24 * 60 * 60 * 1000,
+    samesite: "none",
+    httpOnly: true,
+    secure: true
 }
 
 export const getothermember = (members = [], user) => {
     return members.filter(member => member._id.toString() !== user);
-  };
+};

@@ -22,7 +22,7 @@ app.post('/register', register)
 app.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 app.get('/google/callback',
-  passport.authenticate('google', { session: false, failureRedirect:`${process.env.FRONTEND_URL}/login` }),
+  passport.authenticate('google', { session: false, failureRedirect: `${process.env.FRONTEND_URL}/login` }),
   async (req, res) => {
     // Generate and send JWT token
     const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET);
@@ -32,7 +32,7 @@ app.get('/google/callback',
       maxAge: 3 * 24 * 60 * 60 * 1000, // 3 days
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production', // Secure flag only in production
-      sameSite: 'Strict' // To prevent CSRF attacks
+      sameSite: 'none' // To prevent CSRF attacks
     });
 
     // Redirect to frontend URL
