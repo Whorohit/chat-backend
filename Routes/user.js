@@ -31,7 +31,7 @@ app.get('/google/callback',
     res.cookie('token', token, {
       maxAge: 3 * 24 * 60 * 60 * 1000, // 3 days
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // Secure flag only in production
+      secure: true, // Secure flag only in production
       sameSite: 'none' // To prevent CSRF attacks
     });
 
