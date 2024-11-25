@@ -94,7 +94,8 @@ passport.deserializeUser(async (id, done) => {
 const opts = {
   jwtFromRequest: ExtractJwt.fromExtractors([
     (req) => {
-      return req.cookies.token; // Extract JWT from cookies
+      console.log(req.cookie);
+        return req.cookies.token; // Extract JWT from cookies
     }
   ]),
   secretOrKey: process.env.JWT_SECRET, // JWT secret key
@@ -104,6 +105,8 @@ passport.use(new JwtStrategy(opts, async (jwt_payload, done) => {
   try {
     const user = await User.findById(jwt_payload.id);
     console.log(user);
+    console.log(jwt_payload);
+    
 
     if (user) {
       done(null, user);
