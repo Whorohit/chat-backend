@@ -56,12 +56,12 @@ app.use(cors(corsOptions));
 
 
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'secret',
+  secret: process.env.SESSION_SECRET ,
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: true, // Change to true if using HTTPS
-    httpOnly: false,
+    secure: false, // Change to true if using HTTPS
+    httpOnly: true,
     sameSite: 'none',
     maxAge: 3 * 24 * 60 * 60 * 1000 // 1 day
   }
@@ -95,7 +95,7 @@ const opts = {
   jwtFromRequest: ExtractJwt.fromExtractors([
     (req) => {
       console.log(req.cookie);
-        return req.cookies.token; // Extract JWT from cookies
+      return req.cookies.token; // Extract JWT from cookies
     }
   ]),
   secretOrKey: process.env.JWT_SECRET, // JWT secret key
@@ -106,7 +106,7 @@ passport.use(new JwtStrategy(opts, async (jwt_payload, done) => {
     const user = await User.findById(jwt_payload.id);
     console.log(user);
     console.log(jwt_payload);
-    
+
 
     if (user) {
       done(null, user);

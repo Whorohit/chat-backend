@@ -21,8 +21,8 @@ export const sendtoken = (res, user, code, message) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
     res.status(code).cookie('token', token, {
         maxAge: 3 * 24 * 60 * 60 * 1000, // 1 day
-        httpOnly: false,
-        secure: true,
+        httpOnly: true,
+        secure: false,
         samesite: "none"
     }).json({
         success: true,
