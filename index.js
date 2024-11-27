@@ -32,7 +32,7 @@ dotenv.config({ path: './.env' });
 export const onlineusers = new Map();
 export const callusers = new Map();
 const corsOptions = {
-  origin: 'http://localhost:3000', // Dynamically allow any site
+  origin: 'https://chat-frontend-sigma-seven.vercel.app', // Dynamically allow any site
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true, // Allow credentials
 };
