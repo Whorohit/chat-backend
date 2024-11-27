@@ -55,17 +55,17 @@ app.use(cookieParser());
 app.use(cors(corsOptions));
 
 
-app.use(session({
-  secret: process.env.SESSION_SECRET ,
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: false, // Change to true if using HTTPS
-    httpOnly: true,
-    sameSite: 'none',
-    maxAge: 3 * 24 * 60 * 60 * 1000 // 1 day
-  }
-}));
+// app.use(session({
+//   secret: process.env.SESSION_SECRET ,
+//   resave: false,
+//   saveUninitialized: false,
+//   cookie: {
+//     secure: false, // Change to true if using HTTPS
+//     httpOnly: true,
+//     sameSite: 'None', 
+//     maxAge: 3 * 24 * 60 * 60 * 1000 // 1 day
+//   }
+// }));
 
 
 const io = new Server(server, {
@@ -73,7 +73,7 @@ const io = new Server(server, {
 })
 app.set("io", io)
 app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.session());
 passport.serializeUser((user, done) => {
   done(null, user._id);
 });
@@ -92,12 +92,7 @@ passport.deserializeUser(async (id, done) => {
 });
 
 const opts = {
-  jwtFromRequest: ExtractJwt.fromExtractors([
-    (req) => {
-      console.log(req.cookie);
-      return req.cookies.token; // Extract JWT from cookies
-    }
-  ]),
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),  //
   secretOrKey: process.env.JWT_SECRET, // JWT secret key
 };
 
@@ -483,8 +478,8 @@ app.use(errorMiddleware);
 // createSampleChat(10)
 // createArchived('66e1e8cb8bc61be28617b01c');
 // createmessages(5000);
-// server.listen(port, () => {
-//   console.log(`Server is running at ${port}`);
-// });
+server.listen(port, () => {
+  console.log(`Server is running at ${port}`);
+});
 
-export default server; 
+// export default server; 

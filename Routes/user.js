@@ -21,24 +21,37 @@ app.post('/register', register)
 
 app.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
+// app.get('/google/callback',
+//   passport.authenticate('google', { session: false, failureRedirect: `${process.env.FRONTEND_URL}/login` }),
+//   async (req, res) => {
+//     // Generate and send JWT token
+//     const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, { expiresIn: '3d' }); // JWT with 3 days expiration
+
+//     // Set the JWT token in a cookie
+//     res.json({
+//       message: 'Authentication successful',
+//       token: token,
+//     });
+//     // Redirect to frontend URL
+//     res.redirect(`${process.env.FRONTEND_URL}`);
+//   }
+// );
 app.get('/google/callback',
   passport.authenticate('google', { session: false, failureRedirect: `${process.env.FRONTEND_URL}/login` }),
   async (req, res) => {
-    // Generate and send JWT token
-    const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET);
+    try {
+      // Generate the JWT token
+      const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, { expiresIn: '3d' });
 
-    // Set the JWT token in a cookie
-    res.cookie('token', token, {
-      maxAge: 3 * 24 * 60 * 60 * 1000, // 3 days
-      httpOnly: true,
-      secure: false, // Secure flag only in production
-      sameSite: 'none' // To prevent CSRF attacks
-    });
-
-    // Redirect to frontend URL
-    res.redirect(`${process.env.FRONTEND_URL}`);
+      // Redirect the user to the frontend with the token
+      res.redirect(`http://localhost:3000/google/callback?token=${token}`);
+    } catch (error) {
+      console.error('Google callback error:', error.message);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
   }
 );
+
 
 // app.get('/google/callback', 
 //   passport.authenticate('google', { session: false, failureRedirect: 'http://localhost:3000/login' }), 
