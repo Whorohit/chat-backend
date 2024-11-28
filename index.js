@@ -69,8 +69,10 @@ app.use(cors(corsOptions));
 
 
 const io = new Server(server, {
-  cors: corsOptions
-})
+  cors: corsOptions,
+  transports: ["websocket"],
+},
+)
 app.set("io", io)
 app.use(passport.initialize());
 // app.use(passport.session());
