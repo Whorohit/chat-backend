@@ -44,7 +44,7 @@ app.get('/google/callback',
       const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, { expiresIn: '3d' });
 
       // Redirect the user to the frontend with the token
-      res.redirect(`http://localhost:3000/google/callback?token=${token}`);
+      res.redirect(`${process.env.FRONTEND_URL}/google/callback?token=${token}`);
     } catch (error) {
       console.error('Google callback error:', error.message);
       res.status(500).json({ message: 'Internal Server Error' });
