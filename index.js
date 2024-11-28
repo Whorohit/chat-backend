@@ -175,6 +175,7 @@ io.use((socket, next) => {
 });
 io.on("connection", async (socket) => {
   const user = socket.user
+  console.log(user);
 
   // userSocketIDs.set(user._id.toString(), socket.id)
   onlineusers.set(user._id.toString(), socket.id);
