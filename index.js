@@ -165,6 +165,8 @@ app.get("/", (req, res) => res.send("Express on  bro  Vercel"))
 
 
 io.use((socket, next) => {
+  console.log(socket);
+
   cookieParser()(socket.request, socket.request.res || {}, async (err) => {
     await SocketAthenticater(err, socket, next);
   });
