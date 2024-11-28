@@ -44,7 +44,7 @@ cloudinary.config({
   api_secret: "0KplNPzksSJvqXgSono125cbwCc"
 });
 
-mongodbsend(process.env.MONGO_URI);
+mongodbsend();
 
 
 

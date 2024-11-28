@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 import { v2 as cloudinary } from 'cloudinary'
 import { v4 as uuid } from 'uuid'
-export const mongodbsend = (uri) => {
+export const mongodbsend = () => {
+    const uri=process.env.MONGO_URI
     console.log(uri); 
     mongoose.connect(uri, {
         // useNewUrlParser: true,
