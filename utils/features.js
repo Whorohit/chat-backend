@@ -2,10 +2,12 @@ import mongoose from "mongoose";
 import { v2 as cloudinary } from 'cloudinary'
 import { v4 as uuid } from 'uuid'
 export const mongodbsend = (uri) => {
+    console.log(uri); 
     mongoose.connect(uri, {
         // useNewUrlParser: true,
         // useUnifiedTopology: true,
         socketTimeoutMS: 1000000,
+
     })
         .then(() => console.log('MongoDB connected...'))
         .catch(err => console.log(err));
