@@ -32,9 +32,9 @@ dotenv.config({ path: './.env' });
 export const onlineusers = new Map();
 export const callusers = new Map();
 const corsOptions = {
-  origin: ['http://localhost:3000','https://chat-frontend-sigma-seven.vercel.app'],
+  origin: ['https://chat-frontend-sigma-seven.vercel.app', 'http://localhost:3000'], // Dynamically allow any site
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true
+  credentials: true, // Allow credentials
 };
 
 const server = createServer(app);
@@ -44,7 +44,7 @@ cloudinary.config({
   api_secret: "0KplNPzksSJvqXgSono125cbwCc"
 });
 
-mongodbsend(process.env.MONGO_URI);
+mongodbsend();
 
 
 
@@ -55,24 +55,26 @@ app.use(cookieParser());
 app.use(cors(corsOptions));
 
 
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'secret',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: false, // Change to true if using HTTPS
-    httpOnly: true,
-    maxAge: 3 * 24 * 60 * 60 * 1000 // 1 day
-  }
-}));
+// app.use(session({
+//   secret: process.env.SESSION_SECRET ,
+//   resave: false,
+//   saveUninitialized: false,
+//   cookie: {
+//     secure: false, // Change to true if using HTTPS
+//     httpOnly: true,
+//     sameSite: 'None', 
+//     maxAge: 3 * 24 * 60 * 60 * 1000 // 1 day
+//   }
+// }));
 
 
 const io = new Server(server, {
-  cors: corsOptions
-})
+  cors: corsOptions,
+},
+)
 app.set("io", io)
 app.use(passport.initialize());
- app.use(passport.session());
+// app.use(passport.session());
 passport.serializeUser((user, done) => {
   done(null, user._id);
 });
@@ -91,17 +93,17 @@ passport.deserializeUser(async (id, done) => {
 });
 
 const opts = {
-  jwtFromRequest: ExtractJwt.fromExtractors([
-    (req) => {
-      return req.cookies.token; // Extract JWT from cookies
-    }
-  ]),
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),  //
   secretOrKey: process.env.JWT_SECRET, // JWT secret key
 };
 
 passport.use(new JwtStrategy(opts, async (jwt_payload, done) => {
   try {
     const user = await User.findById(jwt_payload.id);
+    console.log(user);
+    console.log(jwt_payload);
+
+
     if (user) {
       done(null, user);
     } else {
@@ -160,16 +162,19 @@ passport.use(new GoogleStrategy({
 
 app.use('/api/user', userroute);
 app.use('/api/chat', chatroute);
-app.get("/",(req, res) => res.send("Express on  bro  Vercel"))
+app.get("/", (req, res) => res.send("Express on  bro  Vercel"))
 
 
 io.use((socket, next) => {
+  console.log(socket);
+
   cookieParser()(socket.request, socket.request.res || {}, async (err) => {
     await SocketAthenticater(err, socket, next);
   });
 });
 io.on("connection", async (socket) => {
   const user = socket.user
+  console.log(user);
 
   // userSocketIDs.set(user._id.toString(), socket.id)
   onlineusers.set(user._id.toString(), socket.id);
@@ -402,7 +407,7 @@ io.on("connection", async (socket) => {
       socket.to(membersSockets).emit('end-call');
 
       callusers.delete(chatId)
-      
+
 
       if (callresponse) {
         const call = await Call.findById(callid)
@@ -480,3 +485,6 @@ app.use(errorMiddleware);
 server.listen(port, () => {
   console.log(`Server is running at ${port}`);
 });
+// export default (req, res) => {
+//   app(req, res);
+// };

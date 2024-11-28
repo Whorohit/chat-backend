@@ -2,8 +2,9 @@ import mongoose from "mongoose";
 import { v2 as cloudinary } from 'cloudinary'
 import { v4 as uuid } from 'uuid'
 export const mongodbsend = () => {
+   
     const uri=process.env.MONGO_URI
-    console.log(uri); 
+    
     mongoose.connect(uri, {
         // useNewUrlParser: true,
         // useUnifiedTopology: true,
@@ -20,32 +21,32 @@ export const getBase64 = (file) =>
 // utils/features.js
 import jwt from 'jsonwebtoken';
 
-export const sendtoken = (res, user, code, message) => {
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-    res.status(code).cookie('token', token, {
-        maxAge: 3 * 24 * 60 * 60 * 1000, // 1 day
-        httpOnly: true,
-        secure: false,
-        samesite: "none"
-    }).json({
-        success: true,
-        message,
-        user,
-    });
-};
-
 // export const sendtoken = (res, user, code, message) => {
-//     // Create the JWT token
-//     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET,{ expiresIn: '3d' });
-  
-//     // Send the token in the response body (not in cookies)
-//     res.status(code).json({
-//       success: true,
-//       message,
-//       user,
-//       token, // Send the token here
+//     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+//     res.status(code).cookie('token', token, {
+//         maxAge: 3 * 24 * 60 * 60 * 1000, // 1 day
+//         httpOnly: true,
+//         secure: false,
+//         samesite: "none"
+//     }).json({
+//         success: true,
+//         message,
+//         user,
 //     });
-//   };
+// };
+
+export const sendtoken = (res, user, code, message) => {
+    // Create the JWT token
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET,{ expiresIn: '3d' });
+  
+    // Send the token in the response body (not in cookies)
+    res.status(code).json({
+      success: true,
+      message,
+      user,
+      token, // Send the token here
+    });
+  };
   
 
 export const uploadFilesToCloudinary = async (files = []) => {
