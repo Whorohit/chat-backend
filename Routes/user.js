@@ -41,6 +41,8 @@ app.get('/google/callback',
   async (req, res) => {
     try {
       // Generate the JWT token
+      console.log(req.user);
+      
       const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, { expiresIn: '3d' });
 
       // Redirect the user to the frontend with the token

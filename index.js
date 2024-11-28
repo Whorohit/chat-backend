@@ -143,6 +143,7 @@ passport.use(new GoogleStrategy({
   try {
     const email = profile.emails[0].value;
     let user = await User.findOne({ email });
+    console.log(user);
 
     if (!user) {
       // Optionally, create a new user if not found
