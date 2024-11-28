@@ -12,7 +12,7 @@ export const login = (req, res, next) => {
   try {
     passport.authenticate('local', { session: false }, (err, user, info) => {
       if (err || !user) {
-        return next(new ErrorHandler(info.message, 404))
+        return next(new ErrorHandler(info, 404))
 
 
       }
